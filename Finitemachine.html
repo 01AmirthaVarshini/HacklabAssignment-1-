@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Traffic Light Demo</title>
+	<style>
+		button {
+			padding: 20px;
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body>
+    <center>
+
+    <br><br><br>
+	<h1>Traffic Light Demo</h1>
+
+	<p>Current State: <span id="state">Red</span></p>
+
+	<button id="redBtn" onclick="changeState('Red')">Red</button>
+	<button id="yellowBtn" onclick="changeState('Yellow')">Yellow</button>
+	<button id="greenBtn" onclick="changeState('Green')">Green</button>
+
+	<script>
+		let state = 'Red';
+		let timer;
+
+		function changeState(newState) {
+			// Disable buttons to prevent rapid clicking
+			document.getElementById('redBtn').disabled = true;
+			document.getElementById('yellowBtn').disabled = true;
+			document.getElementById('greenBtn').disabled = true;
+
+			// Clear timer if one is already set
+			clearTimeout(timer);
+
+			// Update state text
+			document.getElementById('state').textContent = newState;
+
+			// Determine the next state based on the current state and the button that was pressed
+			let nextState;
+			switch (state) {
+				case 'Red':
+					if (newState === 'Green') {
+						nextState = 'Green';
+					} else {
+						nextState = 'Yellow';
+					}
+					break;
+				case 'Yellow':
+					if (newState === 'Red') {
+						nextState = 'Red';
+					} else {
+						nextState = 'Green';
+					}
+					break;
+				case 'Green':
+					if (newState === 'Yellow') {
+						nextState = 'Yellow';
+					} else {
+						nextState = 'Red';
+					}
+					break;
+			}
+
+			// Set new timer based on the next state
+			switch (nextState) {
+				case 'Green':
+					timer = setTimeout(() => changeState('Yellow'), 15000);
+					break;
+				case 'Yellow':
+					timer = setTimeout(() => changeState('Red'), 5000);
+					break;
+				case 'Red':
+					timer = setTimeout(() => changeState('Green'), 20000);
+					break;
+			}
+
+			// Update state variable and button styles
+			state = nextState;
+			document.getElementById('redBtn').style.backgroundColor = state === 'Red' ? state : 'black';
+			document.getElementById('yellowBtn').style.backgroundColor = state === 'Yellow' ? state : 'black';
+			document.getElementById('greenBtn').style.backgroundColor = state === 'Green' ? state : 'black';
+
+			// Re-enable buttons after timer finishes
+			setTimeout(() => {
+				document.getElementById('redBtn').disabled = false;
+				document.getElementById('yellowBtn').disabled = false;
+				document.getElementById('greenBtn').disabled = false;
+			}, 1000);
+		}
+	</script>
+    </center>
+</body>
+</html>
